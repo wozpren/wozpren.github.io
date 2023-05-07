@@ -198,19 +198,19 @@
                         newNumbers.push(numbers[i]);
                     }
                 }else if(hundred == ""){
-                    if(!placeHasNumber(numbers[i].substr(1, 1), ten) && !placeHasNumber(numbers[i].substr(2, 1), one)){
+                    if(!placeHasNumber(numbers[i].substr(1, 1), ten) || !placeHasNumber(numbers[i].substr(2, 1), one)){
                         newNumbers.push(numbers[i]);
                     }
                 }else if(ten == ""){
-                    if(!placeHasNumber(numbers[i].substr(0, 1), hundred) && !placeHasNumber(numbers[i].substr(2, 1), one)){
+                    if(!placeHasNumber(numbers[i].substr(0, 1), hundred) || !placeHasNumber(numbers[i].substr(2, 1), one)){
                         newNumbers.push(numbers[i]);
                     }
                 }else if(one == ""){
-                    if(!placeHasNumber(numbers[i].substr(0, 1), hundred) && !placeHasNumber(numbers[i].substr(1, 1), ten)){
+                    if(!placeHasNumber(numbers[i].substr(0, 1), hundred) || !placeHasNumber(numbers[i].substr(1, 1), ten)){
                         newNumbers.push(numbers[i]);
                     }
                 }else{
-                    if(!placeHasNumber(numbers[i].substr(0, 1), hundred) && !placeHasNumber(numbers[i].substr(1, 1), ten) && !placeHasNumber(numbers[i].substr(2, 1), one)){
+                    if(!placeHasNumber(numbers[i].substr(0, 1), hundred) || !placeHasNumber(numbers[i].substr(1, 1), ten) || !placeHasNumber(numbers[i].substr(2, 1), one)){
                         newNumbers.push(numbers[i]);
                     }
                 }

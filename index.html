@@ -52,6 +52,7 @@
 
     #numbers .list{
         margin: 8px;
+        margin-bottom: 0;
         border-bottom: 1px solid rgb(100, 100, 100);
     }
 </style>
@@ -61,13 +62,10 @@
         <td><input id="ten" type="text" placeholder="十位"/></td>
         <td><input id="one" type="text" placeholder="个位"/></td>
     </div>
-    <div class="inputs" style="margin-top: 0;">
-        <td><input id="addN" style="width: 70%;" type="text" placeholder="数字"/></td>
-        <button type="button" onclick="add()" style="margin-top: 10px;">添加</button>
-    </div>
     <div class="btns">
         <button type="button" onclick="filter()">筛选</button>
         <button type="button" onclick="reverse()">清除</button>
+        <button type="button" onclick="add()">添加</button>
         <button type="button" onclick="restart()">重启</button>
     </div>
     <div id="numbers">
@@ -109,20 +107,53 @@
         }
 
         function add(){
+            let hundred = document.getElementById("hundred").value;
+            let ten = document.getElementById("ten").value;
+            let one = document.getElementById("one").value;
+
+            
             let length = Math.min(numbers.length, 7);
-            let num = document.getElementById("addN").value;
             for (let i = 0; i < length; i++) {
                 const numberlist = numbers[i];
                 for(let j = 0; j < numberlist.length; j++){
-                    if(numberlist[j] == num){
-                        numbers[i].splice(j, 1)
-                        let ii = Math.min(i + 1, 6);
-                        if(numbers[ii] == undefined){
-                            numbers[ii] = [];
+                    const n = numberlist[j]
+                    if(hundred != ""){
+                        if(placeHasNumber(n.substr(0, 1), hundred)){
+                            numberlist.splice(j, 1);
+                            let ii = Math.min(i + 1, 6)
+                            if(numbers.length <= ii){
+                                numbers.push([]);
+                            }
+                            numbers[ii].push(n);
+                            j--;
+                            continue;
                         }
-                        numbers[ii].push(num)
                     }
-                }                
+                    if(ten != ""){
+                        if(placeHasNumber(n.substr(1, 1), ten)){
+                            numberlist.splice(j, 1);
+                            let ii = Math.min(i + 1, 6)
+                            if(numbers.length <= ii){
+                                numbers.push([]);
+                            }
+                            numbers[ii].push(n);
+                            j--;
+                            continue;
+                        }
+                    }
+                    if(one != ""){
+                        if(placeHasNumber(n.substr(2, 1), one)){
+                            numberlist.splice(j, 1);
+                            let ii = Math.min(i + 1, 6)
+                            if(numbers.length <= ii){
+                                numbers.push([]);
+                            }
+                            numbers[ii].push(n);
+                            j--;
+                            continue;
+                        }
+                    }
+                }
             }
             Update();
         }

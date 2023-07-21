@@ -117,7 +117,10 @@
                 const numberlist = numbers[i];
                 for(let j = 0; j < numberlist.length; j++){
                     const n = numberlist[j]
-                    if(hundred != ""){
+                    if(hundred == "" && ten == "" && one == ""){
+                        return;
+                    }
+                    else if(ten == "" && one == ""){
                         if(placeHasNumber(n.substr(0, 1), hundred)){
                             numberlist.splice(j, 1);
                             let ii = Math.min(i + 1, 6)
@@ -129,7 +132,7 @@
                             continue;
                         }
                     }
-                    if(ten != ""){
+                    else if(hundred == "" && one == ""){
                         if(placeHasNumber(n.substr(1, 1), ten)){
                             numberlist.splice(j, 1);
                             let ii = Math.min(i + 1, 6)
@@ -141,7 +144,7 @@
                             continue;
                         }
                     }
-                    if(one != ""){
+                    else if(hundred == "" && ten == ""){
                         if(placeHasNumber(n.substr(2, 1), one)){
                             numberlist.splice(j, 1);
                             let ii = Math.min(i + 1, 6)
@@ -152,6 +155,54 @@
                             j--;
                             continue;
                         }
+                    }
+                    else if(hundred == ""){
+                        if(placeHasNumber(n.substr(1, 1), ten) && placeHasNumber(n.substr(2, 1), one)){
+                            numberlist.splice(j, 1);
+                            let ii = Math.min(i + 1, 6)
+                            if(numbers.length <= ii){
+                                numbers.push([]);
+                            }
+                            numbers[ii].push(n);
+                            j--;
+                            continue;
+                        }
+                    }
+                    else if(ten == ""){
+                        if(placeHasNumber(n.substr(0, 1), hundred) && placeHasNumber(n.substr(2, 1), one)){
+                            numberlist.splice(j, 1);
+                            let ii = Math.min(i + 1, 6)
+                            if(numbers.length <= ii){
+                                numbers.push([]);
+                            }
+                            numbers[ii].push(n);
+                            j--;
+                            continue;
+                        }
+                    }
+                    else if(one == ""){
+                        if(placeHasNumber(n.substr(0, 1), hundred) && placeHasNumber(n.substr(1, 1), ten)){
+                            numberlist.splice(j, 1);
+                            let ii = Math.min(i + 1, 6)
+                            if(numbers.length <= ii){
+                                numbers.push([]);
+                            }
+                            numbers[ii].push(n);
+                            j--;
+                            continue;
+                        }
+                    }
+                    else{
+                        if(placeHasNumber(n.substr(0, 1), hundred) && placeHasNumber(n.substr(1, 1), ten) && placeHasNumber(n.substr(2, 1), one)){
+                            numberlist.splice(j, 1);
+                            let ii = Math.min(i + 1, 6)
+                            if(numbers.length <= ii){
+                                numbers.push([]);
+                            }
+                            numbers[ii].push(n);
+                            j--;
+                            continue;
+                        }                        
                     }
                 }
             }

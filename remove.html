@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>筛选器</title>
+</head>
+<style>
+    body{
+        margin: 0;
+        padding: 0;
+    }
+
+    .inputs{
+        width: 90vw;
+        margin: 0 auto;
+        margin-top: 1vh;
+    }
+
+    .inputs input{
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-bottom: 1px solid rgb(100, 100, 100);
+        padding: 12px;
+        outline: none;
+        text-align: right;
+    }
+
+    .btns{
+        display: flex;
+        justify-content: space-around;
+    }
+
+    button{
+        width: 20%;
+        height: 10%;
+        margin-top: 2vh;
+        border: none;
+        border-radius: 10px;
+        background-color: rgb(231, 231, 231);
+        font-size: 20px;
+    }
+
+    textarea{
+        width: 100%;
+        height: 160px;
+        border: none;
+        border-bottom: 1px solid rgb(100, 100, 100);
+        padding: 12px;
+        outline: none;
+        text-align: left;
+        resize: none;
+        box-sizing: border-box;
+    }
+
+    #numbers{
+        display: flex;
+        padding: 12px;
+        flex-direction: column;
+    }
+
+    #numbers .list{
+        margin: 8px;
+        margin-bottom: 0;
+        border-bottom: 1px solid rgb(100, 100, 100);
+    }
+</style>
+<body>
+    <div class="inputs">
+        <td><textarea id="num"></textarea></td>
+    </div>
+    <div class="btns">
+        <button type="button" onclick="clearNumbers()">清除</button>
+        <button type="button" onclick="restart()">重启</button>
+    </div>
+    <div id="numbers">
+            
+    </div>
+    <script>
+
+        let numbers = createNumbers();
+        Update()
+        //生成000-999的数字
+        function createNumbers(){
+            let num = [];
+            for(let i = 1; i < 1000; i++){
+                if(i < 10){
+                    num.push("00" + i);
+                }else if(i < 100){
+                    num.push("0" + i);
+                }else{
+                    num.push(new String(i));
+                }
+            }
+            return num;
+        }
+
+        function Update(){
+            let html = "";
+            for(let j = 0; j < numbers.length; j++){
+                html += `${numbers[j]} `
+            }
+            document.getElementById("numbers").innerText = html;
+        }
+
+        function clearNumbers(){
+            let nl = document.getElementById("num").value;
+            nl.split(" ").forEach(element => {
+                for(let i = 0; i < numbers.length; i++){
+                    if(numbers[i] == element){
+                        numbers.splice(i, 1);
+                        i--;
+                        break;
+                    }
+                }
+            });
+            Update();
+        }
+
+
+        //复制到剪贴板
+        function copyToClipboard(text) {
+            console.log(text)
+            var textArea = document.createElement("textarea");
+            textArea.style.position = 'fixed';
+            textArea.style.background = 'transparent';
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                var successful = document.execCommand('copy');
+                var msg = successful ? 'successful' : 'unsuccessful';
+                // console.log('Copying text command was ' + msg);
+            } catch (err) {
+                // console.log('Oops, unable to copy');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function restart(){
+            numbers = createNumbers();
+            Update();
+        }
+
+        //筛选
+        function filter(){
+            let hundred = document.getElementById("hundred").value;
+            let ten = document.getElementById("ten").value;
+            let one = document.getElementById("one").value;
+
+            let length = Math.min(numbers.length, 8);
+            let newNumber = [];
+
+            for (let x = 0; x < length; x++) {
+                const number = numbers[x];
+                let newNumbers = [];
+
+                for(let i = 0; i < number.length; i++){
+                    if(hundred == "" && ten == "" && one == ""){
+                        newNumbers = number;
+                    }else if(hundred == "" && ten == ""){
+                        if(placeHasNumber(number[i].substr(2, 1), one)){
+                            newNumbers.push(number[i]);
+                        }
+                    }else if(hundred == "" && one == ""){
+                        if(placeHasNumber(number[i].substr(1, 1), ten)){
+                            newNumbers.push(number[i]);
+                        }
+                    }else if(ten == "" && one == ""){
+                        if(placeHasNumber(number[i].substr(0, 1), hundred)){
+                            newNumbers.push(number[i]);
+                        }
+                    }else if(hundred == ""){
+                        if(placeHasNumber(number[i].substr(1, 1), ten) && placeHasNumber(number[i].substr(2, 1), one)){
+                            newNumbers.push(number[i]);
+                        }
+                    }else if(ten == ""){
+                        if(placeHasNumber(number[i].substr(0, 1), hundred) && placeHasNumber(number[i].substr(2, 1), one)){
+                            newNumbers.push(number[i]);
+                        }
+                    }else if(one == ""){
+                        if(placeHasNumber(number[i].substr(0, 1), hundred) && placeHasNumber(number[i].substr(1, 1), ten)){
+                            newNumbers.push(number[i]);
+                        }
+                    }else{
+                        if(placeHasNumber(number[i].substr(0, 1), hundred) && placeHasNumber(number[i].substr(1, 1), ten) && placeHasNumber(number[i].substr(2, 1), one)){
+                            newNumbers.push(number[i]);
+                        }
+                    }
+                }
+                newNumber.push(newNumbers);
+            }
+
+
+
+            numbers = newNumber;
+            Update();
+        }
+
+        //该位置是否包含该数字
+        function placeHasNumber(number, numbers){
+            for(let i = 0; i < numbers.length; i++){
+                if(number == numbers[i]){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        //反选
+        function reverse(){
+            let hundred = document.getElementById("hundred").value;
+            let ten = document.getElementById("ten").value;
+            let one = document.getElementById("one").value;
+
+            let length = Math.min(numbers.length, 8);
+            let newNumber = [];
+
+            for (let x = 0; x < length; x++) {
+                const number = numbers[x];
+                let newNumbers = [];
+                for(let i = 0; i < number.length; i++){
+                    if(hundred == "" && ten == "" && one == ""){
+                        newNumbers = number;
+                    }else if(hundred == "" && ten == ""){
+                        if(!placeHasNumber(number[i].substr(2, 1), one)){
+                            newNumbers.push(number[i]);
+                        }
+                    }else if(hundred == "" && one == ""){
+                        if(!placeHasNumber(number[i].substr(1, 1), ten)){
+                            newNumbers.push(number[i]);
+                        }
+                    }else if(ten == "" && one == ""){
+                        if(!placeHasNumber(number[i].substr(0, 1), hundred)){
+                            newNumbers.push(number[i]);
+                        }
+                    }else if(hundred == ""){
+                        if(!placeHasNumber(number[i].substr(1, 1), ten) || !placeHasNumber(number[i].substr(2, 1), one)){
+                            newNumbers.push(number[i]);
+                        }
+                    }else if(ten == ""){
+                        if(!placeHasNumber(number[i].substr(0, 1), hundred) || !placeHasNumber(number[i].substr(2, 1), one)){
+                            newNumbers.push(number[i]);
+                        }
+                    }else if(one == ""){
+                        if(!placeHasNumber(number[i].substr(0, 1), hundred) || !placeHasNumber(number[i].substr(1, 1), ten)){
+                            newNumbers.push(number[i]);
+                        }
+                    }else{
+                        if(!placeHasNumber(number[i].substr(0, 1), hundred) || !placeHasNumber(number[i].substr(1, 1), ten) || !placeHasNumber(number[i].substr(2, 1), one)){
+                            newNumbers.push(number[i]);
+                        }
+                    }
+                }
+                newNumber.push(newNumbers);
+            }
+            numbers = newNumber;
+            Update();
+        }
+    </script>
+</body>
+</html>

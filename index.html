@@ -67,6 +67,7 @@
         <button type="button" onclick="reverse()">清除</button>
         <button type="button" onclick="add()">添加</button>
         <button type="button" onclick="restart()">重启</button>
+        <button type="button" onclick="removeInput()">清空</button>
     </div>
     <div id="numbers">
         <div class="list" id="l0">
@@ -104,6 +105,12 @@
                 }
             }
             return num;
+        }
+
+        function removeInput(){
+            document.getElementById("hundred").value = "";
+            document.getElementById("ten").value = "";
+            document.getElementById("one").value = "";
         }
 
         function add(){

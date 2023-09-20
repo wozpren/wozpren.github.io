@@ -69,6 +69,21 @@
         <button type="button" onclick="restart()">重启</button>
         <button type="button" onclick="removeInput()">清空</button>
     </div>
+    <div class="btns">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="odd">
+            <label class="form-check-label" for="odd">
+              单
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="even" checked>
+            <label class="form-check-label" for="even">
+              双
+            </label>
+          </div>
+    </div>
+
     <div id="numbers">
         <div class="list" id="l0">
         </div>
@@ -88,7 +103,8 @@
         </div>        
     </div>
     <script>
-
+        let filterOdd;
+        let filterEven;
         let numbers = [];
         numbers.push(createNumbers());
         Update()
@@ -123,92 +139,94 @@
                 const numberlist = numbers[i];
                 for(let j = 0; j < numberlist.length; j++){
                     const n = numberlist[j]
-                    if(hundred == "" && ten == "" && one == ""){
-                        return;
-                    }
-                    else if(ten == "" && one == ""){
-                        if(placeHasNumber(n.substr(0, 1), hundred)){
-                            numberlist.splice(j, 1);
-                            let ii = Math.min(i + 1, 7)
-                            if(numbers.length <= ii){
-                                numbers.push([]);
-                            }
-                            numbers[ii].push(n);
-                            j--;
-                            continue;
+                    if((isOdd && isSingular(n)) || (isEven && !isSingular(n))){
+                        if(hundred == "" && ten == "" && one == ""){
+                            return;
                         }
-                    }
-                    else if(hundred == "" && one == ""){
-                        if(placeHasNumber(n.substr(1, 1), ten)){
-                            numberlist.splice(j, 1);
-                            let ii = Math.min(i + 1, 7)
-                            if(numbers.length <= ii){
-                                numbers.push([]);
+                        else if(ten == "" && one == ""){
+                            if(placeHasNumber(n.substr(0, 1), hundred)){
+                                numberlist.splice(j, 1);
+                                let ii = Math.min(i + 1, 7)
+                                if(numbers.length <= ii){
+                                    numbers.push([]);
+                                }
+                                numbers[ii].push(n);
+                                j--;
+                                continue;
                             }
-                            numbers[ii].push(n);
-                            j--;
-                            continue;
                         }
-                    }
-                    else if(hundred == "" && ten == ""){
-                        if(placeHasNumber(n.substr(2, 1), one)){
-                            numberlist.splice(j, 1);
-                            let ii = Math.min(i + 1, 7)
-                            if(numbers.length <= ii){
-                                numbers.push([]);
+                        else if(hundred == "" && one == ""){
+                            if(placeHasNumber(n.substr(1, 1), ten)){
+                                numberlist.splice(j, 1);
+                                let ii = Math.min(i + 1, 7)
+                                if(numbers.length <= ii){
+                                    numbers.push([]);
+                                }
+                                numbers[ii].push(n);
+                                j--;
+                                continue;
                             }
-                            numbers[ii].push(n);
-                            j--;
-                            continue;
                         }
-                    }
-                    else if(hundred == ""){
-                        if(placeHasNumber(n.substr(1, 1), ten) && placeHasNumber(n.substr(2, 1), one)){
-                            numberlist.splice(j, 1);
-                            let ii = Math.min(i + 1, 7)
-                            if(numbers.length <= ii){
-                                numbers.push([]);
+                        else if(hundred == "" && ten == ""){
+                            if(placeHasNumber(n.substr(2, 1), one)){
+                                numberlist.splice(j, 1);
+                                let ii = Math.min(i + 1, 7)
+                                if(numbers.length <= ii){
+                                    numbers.push([]);
+                                }
+                                numbers[ii].push(n);
+                                j--;
+                                continue;
                             }
-                            numbers[ii].push(n);
-                            j--;
-                            continue;
                         }
-                    }
-                    else if(ten == ""){
-                        if(placeHasNumber(n.substr(0, 1), hundred) && placeHasNumber(n.substr(2, 1), one)){
-                            numberlist.splice(j, 1);
-                            let ii = Math.min(i + 1, 7)
-                            if(numbers.length <= ii){
-                                numbers.push([]);
+                        else if(hundred == ""){
+                            if(placeHasNumber(n.substr(1, 1), ten) && placeHasNumber(n.substr(2, 1), one)){
+                                numberlist.splice(j, 1);
+                                let ii = Math.min(i + 1, 7)
+                                if(numbers.length <= ii){
+                                    numbers.push([]);
+                                }
+                                numbers[ii].push(n);
+                                j--;
+                                continue;
                             }
-                            numbers[ii].push(n);
-                            j--;
-                            continue;
                         }
-                    }
-                    else if(one == ""){
-                        if(placeHasNumber(n.substr(0, 1), hundred) && placeHasNumber(n.substr(1, 1), ten)){
-                            numberlist.splice(j, 1);
-                            let ii = Math.min(i + 1, 7)
-                            if(numbers.length <= ii){
-                                numbers.push([]);
+                        else if(ten == ""){
+                            if(placeHasNumber(n.substr(0, 1), hundred) && placeHasNumber(n.substr(2, 1), one)){
+                                numberlist.splice(j, 1);
+                                let ii = Math.min(i + 1, 7)
+                                if(numbers.length <= ii){
+                                    numbers.push([]);
+                                }
+                                numbers[ii].push(n);
+                                j--;
+                                continue;
                             }
-                            numbers[ii].push(n);
-                            j--;
-                            continue;
                         }
-                    }
-                    else{
-                        if(placeHasNumber(n.substr(0, 1), hundred) && placeHasNumber(n.substr(1, 1), ten) && placeHasNumber(n.substr(2, 1), one)){
-                            numberlist.splice(j, 1);
-                            let ii = Math.min(i + 1, 7)
-                            if(numbers.length <= ii){
-                                numbers.push([]);
+                        else if(one == ""){
+                            if(placeHasNumber(n.substr(0, 1), hundred) && placeHasNumber(n.substr(1, 1), ten)){
+                                numberlist.splice(j, 1);
+                                let ii = Math.min(i + 1, 7)
+                                if(numbers.length <= ii){
+                                    numbers.push([]);
+                                }
+                                numbers[ii].push(n);
+                                j--;
+                                continue;
                             }
-                            numbers[ii].push(n);
-                            j--;
-                            continue;
-                        }                        
+                        }
+                        else{
+                            if(placeHasNumber(n.substr(0, 1), hundred) && placeHasNumber(n.substr(1, 1), ten) && placeHasNumber(n.substr(2, 1), one)){
+                                numberlist.splice(j, 1);
+                                let ii = Math.min(i + 1, 7)
+                                if(numbers.length <= ii){
+                                    numbers.push([]);
+                                }
+                                numbers[ii].push(n);
+                                j--;
+                                continue;
+                            }                        
+                        }
                     }
                 }
             }
@@ -259,54 +277,101 @@
             let hundred = document.getElementById("hundred").value;
             let ten = document.getElementById("ten").value;
             let one = document.getElementById("one").value;
-
+            let isOdd = document.getElementById("odd").checked;
+            let isEven = document.getElementById("even").checked;
             let length = Math.min(numbers.length, 8);
             let newNumber = [];
 
             for (let x = 0; x < length; x++) {
                 const number = numbers[x];
                 let newNumbers = [];
-
                 for(let i = 0; i < number.length; i++){
-                    if(hundred == "" && ten == "" && one == ""){
-                        newNumbers = number;
-                    }else if(hundred == "" && ten == ""){
-                        if(placeHasNumber(number[i].substr(2, 1), one)){
-                            newNumbers.push(number[i]);
-                        }
-                    }else if(hundred == "" && one == ""){
-                        if(placeHasNumber(number[i].substr(1, 1), ten)){
-                            newNumbers.push(number[i]);
-                        }
-                    }else if(ten == "" && one == ""){
-                        if(placeHasNumber(number[i].substr(0, 1), hundred)){
-                            newNumbers.push(number[i]);
-                        }
-                    }else if(hundred == ""){
-                        if(placeHasNumber(number[i].substr(1, 1), ten) && placeHasNumber(number[i].substr(2, 1), one)){
-                            newNumbers.push(number[i]);
-                        }
-                    }else if(ten == ""){
-                        if(placeHasNumber(number[i].substr(0, 1), hundred) && placeHasNumber(number[i].substr(2, 1), one)){
-                            newNumbers.push(number[i]);
-                        }
-                    }else if(one == ""){
-                        if(placeHasNumber(number[i].substr(0, 1), hundred) && placeHasNumber(number[i].substr(1, 1), ten)){
-                            newNumbers.push(number[i]);
-                        }
-                    }else{
-                        if(placeHasNumber(number[i].substr(0, 1), hundred) && placeHasNumber(number[i].substr(1, 1), ten) && placeHasNumber(number[i].substr(2, 1), one)){
-                            newNumbers.push(number[i]);
+                    if((isOdd && isSingular(number[i])) || (isEven && !isSingular(number[i]))){
+                        if(hundred == "" && ten == "" && one == ""){
+                            newNumbers = number;
+                        }else if(hundred == "" && ten == ""){
+                            if(placeHasNumber(number[i].substr(2, 1), one)){
+                                newNumbers.push(number[i]);
+                            }
+                        }else if(hundred == "" && one == ""){
+                            if(placeHasNumber(number[i].substr(1, 1), ten)){
+                                newNumbers.push(number[i]);
+                            }
+                        }else if(ten == "" && one == ""){
+                            if(placeHasNumber(number[i].substr(0, 1), hundred)){
+                                newNumbers.push(number[i]);
+                            }
+                        }else if(hundred == ""){
+                            if(placeHasNumber(number[i].substr(1, 1), ten) && placeHasNumber(number[i].substr(2, 1), one)){
+                                newNumbers.push(number[i]);
+                            }
+                        }else if(ten == ""){
+                            if(placeHasNumber(number[i].substr(0, 1), hundred) && placeHasNumber(number[i].substr(2, 1), one)){
+                                newNumbers.push(number[i]);
+                            }
+                        }else if(one == ""){
+                            if(placeHasNumber(number[i].substr(0, 1), hundred) && placeHasNumber(number[i].substr(1, 1), ten)){
+                                newNumbers.push(number[i]);
+                            }
+                        }else{
+                            if(placeHasNumber(number[i].substr(0, 1), hundred) && placeHasNumber(number[i].substr(1, 1), ten) && placeHasNumber(number[i].substr(2, 1), one)){
+                                newNumbers.push(number[i]);
+                            }
                         }
                     }
                 }
                 newNumber.push(newNumbers);
             }
 
-
-
             numbers = newNumber;
             Update();
+        }
+
+        function removeSingular(){
+            let length = Math.min(numbers.length, 8);
+            let newNumber = [];
+            for (let x = 0; x < length; x++) {
+                const number = numbers[x];
+                let newNumbers = [];
+                for(let i = 0; i < number.length; i++){
+                    if(number[i] % 2 == 0){
+                        newNumbers.push(number[i]);
+                    }
+                }
+                newNumber.push(newNumbers);
+            }
+            numbers = newNumber;
+            Update();
+        }
+
+        function removeEvenNumber(){
+            let length = Math.min(numbers.length, 8);
+            let newNumber = [];
+            for (let x = 0; x < length; x++) {
+                const number = numbers[x];
+                let newNumbers = [];
+                for(let i = 0; i < number.length; i++){
+                    if(number[i] % 2 != 0){
+                        newNumbers.push(number[i]);
+                    }
+                }
+                newNumber.push(newNumbers);
+            }
+            numbers = newNumber;
+            Update();
+        }
+
+        function isSingular(number){
+            if(number.substr(0, 1) == number.substr(1, 1)){
+                return false;
+            }
+            if(number.substr(0, 1) == number.substr(2, 1)){
+                return false;
+            }
+            if(number.substr(1, 1) == number.substr(2, 1)){
+                return false;
+            }
+            return true;
         }
 
         //该位置是否包含该数字
@@ -332,35 +397,37 @@
                 const number = numbers[x];
                 let newNumbers = [];
                 for(let i = 0; i < number.length; i++){
-                    if(hundred == "" && ten == "" && one == ""){
-                        newNumbers = number;
-                    }else if(hundred == "" && ten == ""){
-                        if(!placeHasNumber(number[i].substr(2, 1), one)){
-                            newNumbers.push(number[i]);
-                        }
-                    }else if(hundred == "" && one == ""){
-                        if(!placeHasNumber(number[i].substr(1, 1), ten)){
-                            newNumbers.push(number[i]);
-                        }
-                    }else if(ten == "" && one == ""){
-                        if(!placeHasNumber(number[i].substr(0, 1), hundred)){
-                            newNumbers.push(number[i]);
-                        }
-                    }else if(hundred == ""){
-                        if(!placeHasNumber(number[i].substr(1, 1), ten) || !placeHasNumber(number[i].substr(2, 1), one)){
-                            newNumbers.push(number[i]);
-                        }
-                    }else if(ten == ""){
-                        if(!placeHasNumber(number[i].substr(0, 1), hundred) || !placeHasNumber(number[i].substr(2, 1), one)){
-                            newNumbers.push(number[i]);
-                        }
-                    }else if(one == ""){
-                        if(!placeHasNumber(number[i].substr(0, 1), hundred) || !placeHasNumber(number[i].substr(1, 1), ten)){
-                            newNumbers.push(number[i]);
-                        }
-                    }else{
-                        if(!placeHasNumber(number[i].substr(0, 1), hundred) || !placeHasNumber(number[i].substr(1, 1), ten) || !placeHasNumber(number[i].substr(2, 1), one)){
-                            newNumbers.push(number[i]);
+                        if((isOdd && isSingular(number[i])) || (isEven && !isSingular(number[i]))){
+                        if(hundred == "" && ten == "" && one == ""){
+                            newNumbers = number;
+                        }else if(hundred == "" && ten == ""){
+                            if(!placeHasNumber(number[i].substr(2, 1), one)){
+                                newNumbers.push(number[i]);
+                            }
+                        }else if(hundred == "" && one == ""){
+                            if(!placeHasNumber(number[i].substr(1, 1), ten)){
+                                newNumbers.push(number[i]);
+                            }
+                        }else if(ten == "" && one == ""){
+                            if(!placeHasNumber(number[i].substr(0, 1), hundred)){
+                                newNumbers.push(number[i]);
+                            }
+                        }else if(hundred == ""){
+                            if(!placeHasNumber(number[i].substr(1, 1), ten) || !placeHasNumber(number[i].substr(2, 1), one)){
+                                newNumbers.push(number[i]);
+                            }
+                        }else if(ten == ""){
+                            if(!placeHasNumber(number[i].substr(0, 1), hundred) || !placeHasNumber(number[i].substr(2, 1), one)){
+                                newNumbers.push(number[i]);
+                            }
+                        }else if(one == ""){
+                            if(!placeHasNumber(number[i].substr(0, 1), hundred) || !placeHasNumber(number[i].substr(1, 1), ten)){
+                                newNumbers.push(number[i]);
+                            }
+                        }else{
+                            if(!placeHasNumber(number[i].substr(0, 1), hundred) || !placeHasNumber(number[i].substr(1, 1), ten) || !placeHasNumber(number[i].substr(2, 1), one)){
+                                newNumbers.push(number[i]);
+                            }
                         }
                     }
                 }

@@ -69,6 +69,10 @@
         <button type="button" onclick="restart()">重启</button>
         <button type="button" onclick="removeInput()">清空</button>
     </div>
+    <div class="inputs" style="margin-top: 0;">
+        <td><input id="two" type="text" placeholder="输入"/></td>
+        <td><button type="button" onclick="filterTwo()">筛选</button></td>
+    </div>
     <div class="btns">
         <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="odd">
@@ -268,6 +272,31 @@
                 // console.log('Oops, unable to copy');
             }
             document.body.removeChild(textArea);
+        }
+
+                function filterTwo(){
+            let value = document.getElementById("two").value;
+            let nlist = new Array()
+            for (let index = 0; index < value.length - 1; index++) {
+                for (let y = index+1; y < value.length; y++) {
+                    const o = value[index];
+                    const t = value[y]; 
+                    nlist.push(o + t);
+                }
+            }
+            let length = Math.min(numbers.length, 7);
+            for (let i = length - 1; i >= 0 ; i--){
+                for (let index = numbers[i].length - 1; index >= 0; index--) {
+                    const element = numbers[i][index];
+                    for (const remove of nlist) {
+                        if(element.indexOf(remove) != -1){
+                            numbers[i].splice(index, 1);
+                            break;
+                        }
+                    }
+                }
+            }
+            Update();
         }
 
         function restart(){

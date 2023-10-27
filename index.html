@@ -274,7 +274,7 @@
             document.body.removeChild(textArea);
         }
 
-                function filterTwo(){
+        function filterTwo(){
             let value = document.getElementById("two").value;
             let nlist = new Array()
             for (let index = 0; index < value.length - 1; index++) {
@@ -284,6 +284,20 @@
                     nlist.push(o + t);
                 }
             }
+            let length = Math.min(numbers.length, 7);
+            for (let i = length - 1; i >= 0 ; i--){
+                for (let index = numbers[i].length - 1; index >= 0; index--) {
+                    const element = numbers[i][index];
+                    for (const remove of nlist) {
+                        if(element.indexOf(remove[0]) != -1 && element.indexOf(remove[1]) != -1 ){
+                            numbers[i].splice(index, 1);
+                            break;
+                        }
+                    }
+                }
+            }
+            Update();
+        }
             let length = Math.min(numbers.length, 7);
             for (let i = length - 1; i >= 0 ; i--){
                 for (let index = numbers[i].length - 1; index >= 0; index--) {

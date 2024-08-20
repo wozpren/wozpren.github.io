@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>筛选器</title>
-</head>
 <style>
     body{
         margin: 0;
@@ -67,24 +64,39 @@
         margin-bottom: 0;
         border-bottom: 1px solid rgb(100, 100, 100);
     }
-</style>
+
+    .line{
+        margin-top: 1vh;
+        border-bottom: 1px solid rgb(100, 100, 100);
+    }
+</style></head>
+
 <body>
     <div class="inputs">
-        <td><textarea id="num"></textarea></td>
+        <textarea id="num"></textarea>
     </div>
     <div class="btns">
         <button type="button" onclick="clearNumbers()">清除</button>
+        <button type="button" onclick="addNumbers()">添加</button>
         <button type="button" onclick="restart()">重启</button>
     </div>
-    <div id="numbers">
-            
-    </div>
+    <div id="numbers0" class="line"></div>
+    <div id="numbers1" class="line"></div>
+    <div id="numbers2" class="line"></div>
+    <div id="numbers3" class="line"></div>
+    <div id="numbers4" class="line"></div>
+    <div id="numbers5" class="line"></div>
+    <div id="numbers6" class="line"></div>
     <script>
 
         let numbers = createNumbers();
+
+
+
         Update()
         //生成000-999的数字
         function createNumbers(){
+            let nums = new Array(7);
             let num = [];
             for(let i = 1; i < 1000; i++){
                 if(i < 10){
@@ -95,25 +107,54 @@
                     num.push(new String(i));
                 }
             }
-            return num;
+            nums[0] = num;
+            nums[1] = [];
+            nums[2] = [];
+            nums[3] = [];
+            nums[4] = [];
+            nums[5] = [];
+            nums[6] = [];
+            return nums;
         }
 
         function Update(){
-            let html = "";
-            for(let j = 0; j < numbers.length; j++){
-                html += `${numbers[j]} `
+            for(let i = 0; i < numbers.length; i++){
+                let html = "";
+                for(let j = 0; j < numbers[i].length; j++){
+                    html += `${numbers[i][j]} `
+                }
+                document.getElementById("numbers" + i).innerHTML = `<div class="list">${html}</div>`;
             }
-            document.getElementById("numbers").innerText = html;
+        }
+
+        function addNumbers(){
+            let nl = document.getElementById("num").value;
+            nl.split(" ").forEach(element => {
+                for(let i = numbers.length - 2; i >= 0; i--){
+                    let number = numbers[i];
+                    debugger;
+                    for(let j = 0; j < number.length; j++){
+                        if(number[j] == element){
+                            number.splice(j, 1);
+                            numbers[i+1].push(element);
+                        }
+                    }
+                }
+            });
+            Update();
         }
 
         function clearNumbers(){
             let nl = document.getElementById("num").value;
             nl.split(" ").forEach(element => {
                 for(let i = 0; i < numbers.length; i++){
-                    if(numbers[i] == element){
-                        numbers.splice(i, 1);
-                        i--;
-                        break;
+                    let number = numbers[i];
+                    debugger;
+                    for(let j = 0; j < number.length; j++){
+                        if(number[j] == element){
+                            number.splice(j, 1);
+                            j--;
+                        }
                     }
                 }
             });
@@ -261,5 +302,5 @@
             Update();
         }
     </script>
-</body>
-</html>
+
+</body></html>

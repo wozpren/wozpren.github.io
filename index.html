@@ -35,7 +35,7 @@
     }
 
     button{
-        width: 20%;
+        width: 19%;
         height: 10%;
         margin-top: 2vh;
         border: none;
@@ -72,7 +72,10 @@
     <div class="inputs" style="margin-top: 0;">
         <td><input id="two" type="text" placeholder="输入"/></td>
         <td><button type="button" onclick="filterTwo()">筛选</button></td>
+        <td><input id="three" type="text" placeholder="输入"/></td>
+        <td><button type="button" onclick="filterThree()">清除</button></td>
     </div>
+
     <div class="btns">
         <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="odd">
@@ -234,7 +237,7 @@
                         }
                     }
                     else{
-                        newNumbers.push(number[i]);
+                        //newNumbers.push(number[i]);
                     }
                 }
             }
@@ -297,6 +300,31 @@
                 }
             }
             Update();
+        }
+
+        function filterThree(){
+            let value = document.getElementById("three").value;
+            let length = Math.min(numbers.length, 7);
+            for (let i = length - 1; i >= 0 ; i--){
+                for (let index = numbers[i].length - 1; index >= 0; index--) {
+                    const n = numbers[i][index];
+                    if(!checkeNum(n, value)){
+                        numbers[i].splice(index, 1);
+                    }
+                }
+            }
+            Update();
+        }
+
+
+        function checkeNum(n, value){
+            for (let index = 0; index < n.length; index++) {
+                const ig = n[index];
+                if(!value.includes(ig)){
+                    return true;
+                }
+            }
+            return false;
         }
 
         function restart(){

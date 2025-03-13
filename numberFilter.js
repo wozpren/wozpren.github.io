@@ -3,9 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const result = document.getElementById('result');
     const resultThree = document.getElementById('result-three');
     const resultFour = document.getElementById('result-four');
+    const resultCount = document.getElementById('result-count');
+    const resultThreeCount = document.getElementById('result-three-count');
+    const resultFourCount = document.getElementById('result-four-count');
+    const sumInput = document.getElementById('sumInput');
 
     let numbers = generateNumbers();
     result.textContent = numbers.join(' ');
+    updateCounts();
 
     function generateNumbers() {
         const numbers = [];
@@ -13,6 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
             numbers.push(i.toString().padStart(5, '0'));
         }
         return numbers;
+    }
+
+    function updateCounts() {
+        resultCount.textContent = `总数: ${numbers.length}`;
+        const uniqueFirstThree = [...new Set(numbers.map(num => num.slice(0, 3)))];
+        const uniqueFirstFour = [...new Set(numbers.map(num => num.slice(0, 4)))];
+        resultThreeCount.textContent = `前三位数量: ${uniqueFirstThree.length}`;
+        resultFourCount.textContent = `前四位数量: ${uniqueFirstFour.length}`;
     }
 
     function filterNumbers(exclude = false) {
@@ -34,6 +47,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         result.textContent = numbers.join(' ');
+        updateCounts();
+    }
+
+    function calculateSum(num) {
+        return num.split('').reduce((sum, digit) => sum + parseInt(digit), 0);
     }
 
     // 输入验证
@@ -50,6 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     document.getElementById('clearBtn').addEventListener('click', () => {
         inputs.forEach(input => input.value = '');
+        result.textContent = '';
+        resultThree.textContent = '';
+        resultFour.textContent = '';
+        resultCount.textContent = '总数: 0';
+        resultThreeCount.textContent = '前三位数量: 0';
+        resultFourCount.textContent = '前四位数量: 0';
     });
 
     document.getElementById('copyThreeBtn').addEventListener('click', () => {
@@ -65,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const uniqueFirstThree = [...new Set(numbers.map(num => num.slice(0, 3)))];
         result.textContent = numbers.join(' ');
         resultThree.textContent = uniqueFirstThree.sort().join(' ');
+        updateCounts();
     });
 
     document.getElementById('copyFourBtn').addEventListener('click', () => {
@@ -80,6 +105,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const uniqueFirstFour = [...new Set(numbers.map(num => num.slice(0, 4)))];
         result.textContent = numbers.join(' ');
         resultThree.textContent = uniqueFirstFour.sort().join(' ');
+        updateCounts();
     });
 
+    // 添加和值过滤功能
+    document.getElementById('excludeSumBtn').addEventListener('click', () => {
+        const targetSum = parseInt(sumInput.value);
+        if (!targetSum || targetSum < 1 || targetSum > 45) {
+            alert('请输入1到45之间的数字');
+            return;
+        }
+
+        numbers = numbers.filter(num => calculateSum(num) !== targetSum);
+        result.textContent = numbers.join(' ');
+        updateCounts();
+    });
+
+    // 更新输入验证
+    sumInput.addEventListener('input', (e) => {
+        let value = parseInt(e.target.value);
+        if (value < 1) e.target.value = 1;
+        if (value > 45) e.target.value = 45;
+    });
 });

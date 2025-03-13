@@ -30,14 +30,31 @@
             </div>
         </div>
         <div class="button-group">
+            <div class="sum-input">
+                <label>和值</label>
+                <input type="number" id="sumInput" min="1" max="45">
+            </div>
             <button id="filterBtn">筛选</button>
             <button id="excludeBtn">清除</button>
             <button id="clearBtn">清空</button>
             <button id="copyThreeBtn">复制前三</button>
             <button id="copyFourBtn">复制前四</button>
+            <button id="excludeSumBtn">清除和值</button>
         </div>
-        <div class="result" id="result"></div>
-        <div class="result-three" id="result-three"></div>
+        <div class="result-container">
+            <div class="result-wrapper">
+                <div class="count" id="result-count">总数: 0</div>
+                <div class="result" id="result"></div>
+            </div>
+            <div class="result-wrapper">
+                <div class="count" id="result-three-count">前三位数量: 0</div>
+                <div class="result-three" id="result-three"></div>
+            </div>
+            <div class="result-wrapper">
+                <div class="count" id="result-four-count">前四位数量: 0</div>
+                <div class="result-four" id="result-four"></div>
+            </div>
+        </div>
     </div>
     <script src="numberFilter.js"></script>
 </body>

@@ -49,3 +49,26 @@ button {
     padding: 10px;
     margin-top: 20px;
 }
+
+.result-wrapper {
+    flex: 1;
+}
+
+.count {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.sum-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sum-input input {
+    width: 60px;
+    height: 30px;
+    text-align: center;
+    font-size: 16px;
+}

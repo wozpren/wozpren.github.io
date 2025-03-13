@@ -68,12 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     document.getElementById('clearBtn').addEventListener('click', () => {
         inputs.forEach(input => input.value = '');
-        result.textContent = '';
-        resultThree.textContent = '';
-        resultFour.textContent = '';
-        resultCount.textContent = '总数: 0';
-        resultThreeCount.textContent = '前三位数量: 0';
-        resultFourCount.textContent = '前四位数量: 0';
     });
 
     document.getElementById('copyThreeBtn').addEventListener('click', () => {

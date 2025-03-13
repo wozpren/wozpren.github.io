@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return values;
         });
         
-        numbers = generateNumbers().filter(num => {
+        numbers = numbers.filter(num => {
             let match = true;
             for (let i = 0; i < 5; i++) {
                 if (inputValues[i].length > 0 && !inputValues[i].includes(num[i])) {
@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     document.getElementById('clearBtn').addEventListener('click', () => {
         inputs.forEach(input => input.value = '');
-        result.textContent = '';
     });
 
     document.getElementById('copyThreeBtn').addEventListener('click', () => {

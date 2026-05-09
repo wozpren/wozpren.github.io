@@ -3,11 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <!-- 确保移动端不缩放，保持最佳全屏体验 -->
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes">
     <title>Unity Web Player | cgame2</title>
     <style>
-      /* 重置默认边距，并强制 html 和 body 占满全屏，隐藏滚动条 */
       html, body {
         width: 100%;
         height: 100%;
@@ -16,33 +14,64 @@
         overflow: hidden;
         background: #231F20;
       }
-      /* 让 Canvas 强行填满父容器（即屏幕） */
       #unity-canvas {
         width: 100%;
         height: 100%;
         display: block;
       }
+
+      /* --- 进度条样式 --- */
+      #unity-loading-bar {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 200px;
+        height: 18px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        border: 2px solid #555;
+        display: block; /* 加载前显示 */
+      }
+      #unity-progress-bar-full {
+        width: 0%;
+        height: 100%;
+        background: #fff; /* 进度条颜色 */
+        border-radius: 8px;
+        transition: width 0.2s ease; /* 让动画更平滑 */
+      }
     </style>
   </head>
   <body>
-    <!-- 移除了硬编码的 width="960" height="600" 和内联样式 -->
     <canvas id="unity-canvas" tabindex="-1"></canvas>
-    <script src="Build/Game2.loader.js"></script>
+
+    <!-- 进度条 HTML 结构 -->
+    <div id="unity-loading-bar">
+      <div id="unity-progress-bar-full"></div>
+    </div>
+
+    <script src="https://admin-1319448495.cos.ap-guangzhou.myqcloud.com/Game2/Game2.loader.js"></script>
     <script>
-      // 统一直接创建 Unity 实例，不再区分移动端和 PC 端，因为 CSS 已经实现了全屏
-      createUnityInstance(document.querySelector("#unity-canvas"), {
+      const canvas = document.querySelector("#unity-canvas");
+      const loadingBar = document.querySelector("#unity-loading-bar");
+      const progressBarFull = document.querySelector("#unity-progress-bar-full");
+
+      createUnityInstance(canvas, {
         arguments: [],
-        dataUrl: "Build/Game2.data.unityweb",
-        frameworkUrl: "Build/Game2.framework.js.unityweb",
-        codeUrl: "Build/Game2.wasm.unityweb",
+        dataUrl: "https://admin-1319448495.cos.ap-guangzhou.myqcloud.com/Game2/Game2.data.unityweb",
+        frameworkUrl: "https://admin-1319448495.cos.ap-guangzhou.myqcloud.com/Game2/Game2.framework.js.unityweb",
+        codeUrl: "https://admin-1319448495.cos.ap-guangzhou.myqcloud.com/Game2/Game2.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "wozpren",
         productName: "cgame2",
         productVersion: "1.0",
-        // matchWebGLToCanvasSize: true, // 默认就是 true，Unity会自动将分辨率匹配Canvas大小
-        // devicePixelRatio: 1, 
+      }, (progress) => {
+        // 更新进度条宽度
+        // progress 的值从 0 到 1
+        progressBarFull.style.width = (100 * progress) + "%";
       }).then((unityInstance) => {
-        // 游戏加载完成后的回调
+        // 游戏加载完成后，隐藏进度条
+        loadingBar.style.display = "none";
       }).catch((message) => {
         alert(message);
       });
